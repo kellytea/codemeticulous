@@ -162,7 +162,6 @@ def ai_convert(api_key: str, llm_model: str, source_format: str, target_format: 
             traceback.print_exc()
     try:
         converted_data = _convert_ai(api_key, llm_model, source_format, target_format, input_data)
-        click.echo("AI-assisted conversion successful.")
     except Exception as e:
         click.echo(f"Error during AI-assisted conversion: {str(e)}", err=True)
         if verbose:
