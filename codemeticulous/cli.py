@@ -106,14 +106,6 @@ def validate(format_name, input_file, verbose):
 
 @cli.command()
 @click.option(
-    "-k",
-    "--key",
-    "api_key",
-    type=str,
-    required=True,
-    help="API key for LLM authorization",
-)
-@click.option(
     "-m",
     "--model",
     "llm_model",
@@ -153,7 +145,7 @@ def validate(format_name, input_file, verbose):
     help="Print verbose output",
 )
 @click.argument("input_file", type=click.Path(exists=True))
-def ai_convert(api_key: str, llm_model: str, source_format: str, target_format: str, input_file, output_file, verbose):
+def ai_convert(llm_model: str, source_format: str, target_format: str, input_file, output_file, verbose):
     try:
         input_data = load_file_autodetect(input_file)
     except Exception as e:
@@ -161,7 +153,7 @@ def ai_convert(api_key: str, llm_model: str, source_format: str, target_format: 
         if verbose:
             traceback.print_exc()
     try:
-        converted_data = _convert_ai(api_key, llm_model, source_format, target_format, input_data)
+        converted_data = _convert_ai(llm_model, source_format, target_format, input_data)
     except Exception as e:
         click.echo(f"Error during AI-assisted conversion: {str(e)}", err=True)
         if verbose:
