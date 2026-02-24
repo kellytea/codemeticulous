@@ -3,9 +3,12 @@ import traceback
 import click
 import json
 import yaml
+from dotenv import load_dotenv
 
 from codemeticulous.convert import STANDARDS, convert as _convert
 from codemeticulous.ai_convert import convert_ai as _convert_ai
+from codemeticulous.generate_schemas import generate_schemas as _generate_schemas
+load_dotenv()
 
 @click.group()
 def cli():
@@ -102,6 +105,22 @@ def validate(format_name, input_file, verbose):
         click.echo(str(e), err=True)
         if verbose:
             traceback.print_exc()
+
+
+@cli.command()
+@click.option(
+    "-m",
+    "--model",
+    "llm_model",
+    type=str,
+    required=True,
+    help="LLM model to use for conversion (e.g., 'openrouter/openai/gpt-4o')",
+)
+def generate_schemas(llm_model: str):
+    try:
+        _generate_schemas(llm_model)
+    except Exception as e:
+        click.echo(f"Error from attempting to generate and cache schemas: {str(e)}", err=True)
 
 
 @cli.command()
