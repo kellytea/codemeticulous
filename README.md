@@ -145,3 +145,13 @@ Run tests
 $ uv run pytest tests
 ```
 
+## Experimental AI Mode
+An optional mode to sidestep manually encoding logic conversions between metadata formats by leveraging LLMs to automate the process:
+
+```
+$ codemeticulous ai-convert --model <LLM-model> --from codemeta --to cff codemeta.json > CITATION.cff
+```
+
+Currently, it can convert between known formats (listed in ```standards.py```), outputting structured data which is then deserialized back into codemeticulous/pydantic objects.
+
+*Note: ensure that ```.env``` contains the necessary API keys to call the LLM.*
