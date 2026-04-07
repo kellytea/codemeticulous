@@ -155,3 +155,8 @@ $ codemeticulous ai-convert --model <LLM-model> --from codemeta --to cff codemet
 Currently, it can convert between known formats (listed in ```standards.py```), outputting structured data which is then deserialized back into codemeticulous/pydantic objects.
 
 *Note: ensure that ```.env``` contains the necessary API keys to call the LLM.*
+
+Run experiemental AI tests
+```
+$ uv run pytest test_llm/
+```
