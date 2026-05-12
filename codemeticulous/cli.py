@@ -172,7 +172,7 @@ def ai_convert(llm_model: str, source_format: str, target_format: str, input_fil
         if verbose:
             traceback.print_exc()
     try:
-        converted_data = _convert_ai(llm_model, source_format, target_format, input_data)
+        converted_data, _ = _convert_ai(llm_model, source_format, target_format, input_data)
     except Exception as e:
         click.echo(f"Error during AI-assisted conversion: {str(e)}", err=True)
         if verbose:

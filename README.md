@@ -158,5 +158,5 @@ Currently, it can convert between known formats (listed in ```standards.py```), 
 
 Run experiemental AI tests
 ```
-$ uv run pytest test_llm/
+$ uv run pytest tests_llm/
 ```
