@@ -156,7 +156,7 @@ Currently, it can convert between known formats (listed in ```standards.py```), 
 
 *Note: ensure that ```.env``` contains the necessary API keys to call the LLM.*
 
-Run experiemental AI tests
+Run experimental AI tests
 ```
 $ uv run pytest tests_llm/
 ```

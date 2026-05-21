@@ -308,10 +308,8 @@ def codemeta_license_to_datacite_rights(
     return rights_list or None
 
 
-def codemeta_language_fileformat_to_datacite_format(
-    programming_language, file_format
-) -> list[str]:
-    possible_formats = ensure_list(programming_language) + ensure_list(file_format)
+def codemeta_language_fileformat_to_datacite_format(file_format) -> list[str]:
+    possible_formats = ensure_list(file_format)
     formats = []
     for f in possible_formats:
         if isinstance(f, str):
@@ -384,10 +382,8 @@ def canonical_to_datacite(
                 # TODO: though, it may be possible to use the following codemeta fields:
                 # hasPart, isPartOf, readme, sameAs, review, releaseNotes
                 # relatedIdentifiers=data.relatedLink,
-                # sizes=[data.fileSize] if data.fileSize else None,
-                # formats=codemeta_language_fileformat_to_datacite_format(
-                #     data.programmingLanguage, data.fileFormat
-                # ),
+                sizes=[data.fileSize] if data.fileSize else None,
+                formats=codemeta_language_fileformat_to_datacite_format(data.fileFormat),
                 version=str(data.version) if data.version else None,
                 rightsList=codemeta_license_to_datacite_rights(data.license),
                 descriptions=descriptions,

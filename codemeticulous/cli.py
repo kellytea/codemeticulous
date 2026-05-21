@@ -171,6 +171,7 @@ def ai_convert(llm_model: str, source_format: str, target_format: str, input_fil
         click.echo(f"Failed to load file: {input_file}. {str(e)}", err=True)
         if verbose:
             traceback.print_exc()
+        return
     try:
         converted_data, _ = _convert_ai(llm_model, source_format, target_format, input_data)
     except Exception as e:
