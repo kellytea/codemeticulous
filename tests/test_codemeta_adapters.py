@@ -16,6 +16,25 @@ from codemeticulous.models import (
 )
 
 
+def test_doi_urls_are_typed_when_read_from_codemeta_identifiers() -> None:
+    result = codemeta_to_software_metadata(
+        CodeMetaV3.model_validate(
+            {
+                "@context": "https://w3id.org/codemeta/3.0",
+                "@type": "SoftwareSourceCode",
+                "@id": "https://doi.org/10.1234/example",
+                "name": "Tool",
+                "identifier": "doi:10.1234/alternate",
+            }
+        )
+    )
+
+    assert [(item.value, item.scheme) for item in result.value.identifiers] == [
+        ("https://doi.org/10.1234/example", "DOI"),
+        ("doi:10.1234/alternate", "DOI"),
+    ]
+
+
 def test_codemeta_to_software_metadata_maps_semantic_values() -> None:
     source = CodeMetaV3.model_validate(
         {

@@ -1,0 +1,11 @@
+{
+  "source": "https://github.com/example/research-tool/releases/tag/v2.0.0",
+  "retrieved": {
+    "name": "Example Research Tool",
+    "version": "2.0.0",
+    "datePublished": "2024-01-02",
+    "codeRepository": "https://github.com/example/research-tool",
+    "license": "MIT",
+    "programmingLanguage": "Python"
+  }
+}

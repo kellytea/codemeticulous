@@ -18,6 +18,7 @@ def test_convert_returns_software_metadata_with_issues() -> None:
         "codemeta",
         "software-metadata",
         {"@type": "SoftwareSourceCode", "name": "Tool", "author": "Unknown author"},
+        target_version="1",
     )
 
     assert result.value.title == "Tool"
@@ -36,6 +37,7 @@ def test_convert_aggregates_input_and_output_issues() -> None:
             "datePublished": "2024-01-01",
             "downloadUrl": "https://example.org/download",
         },
+        target_version="4.6",
     )
 
     assert result.value.publicationYear == "2024"
@@ -48,9 +50,9 @@ def test_convert_aggregates_input_and_output_issues() -> None:
 
 def test_convert_rejects_unsupported_directions() -> None:
     with pytest.raises(ConversionError):
-        convert("datacite", "software-metadata", {})
+        convert("datacite", "software-metadata", {}, target_version="1")
     with pytest.raises(ConversionError):
-        convert("codemeta", "unknown", {})
+        convert("codemeta", "unknown", {}, target_version="1")
 
 
 @pytest.mark.parametrize(
@@ -73,6 +75,12 @@ def test_convert_supports_each_target(target: str, expected_type: type) -> None:
             "publisher": {"@type": "Organization", "name": "Press"},
             "datePublished": "2024-01-01",
         },
+        target_version={
+            "software-metadata": "1",
+            "codemeta": "3.0",
+            "cff": "1.2.0",
+            "datacite": "4.6",
+        }[target],
     )
 
     assert isinstance(result.value, expected_type)

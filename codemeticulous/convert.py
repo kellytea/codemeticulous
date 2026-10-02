@@ -15,26 +15,35 @@ from codemeticulous.codemeta.models import CodeMetaV3
 from codemeticulous.conversion import ConversionError, ConversionIssue, ConversionResult
 from codemeticulous.datacite.convert import software_metadata_to_datacite
 from codemeticulous.datacite.models import DataCite
+from codemeticulous.formats import normalize_format, require_version
 from codemeticulous.models import SoftwareMetadata
-
 
 VALIDATION_MODELS: dict[str, type[BaseModel]] = {
     "codemeta": CodeMetaV3,
     "cff": CitationFileFormat,
     "datacite": DataCite,
 }
-TARGETS = ("software-metadata", "codemeta", "cff", "datacite")
+TARGETS = (
+    "software-metadata",
+    "codemeta",
+    "codemeta.json",
+    "cff",
+    "datacite",
+    "datacite.xml",
+)
 
 
 def convert(
     source_format: str,
     target_format: str,
     source_data: Mapping[str, object] | CodeMetaV3,
+    *,
+    target_version: str,
 ) -> ConversionResult[BaseModel]:
+    source_format = normalize_format(source_format)
+    target_format = require_version(target_format, target_version)
     if source_format != "codemeta":
         raise ConversionError(f"Unsupported source format: {source_format}")
-    if target_format not in TARGETS:
-        raise ConversionError(f"Unsupported target format: {target_format}")
 
     try:
         source = (

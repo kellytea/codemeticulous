@@ -1,0 +1,66 @@
+version: 1
+network: disabled
+fixtures_root: fixtures
+scenarios:
+  - id: repository-to-codemeta
+    prompt: Generate CodeMeta metadata for https://github.com/example/research-tool using CodeMeta version 3.0.
+    fixtures: [repository-release.json, collected-codemeta.json]
+    expect:
+      outcome: validated-artifact
+      target: codemeta.json@3.0
+      provenance_required: true
+
+  - id: doi-to-codemeta
+    prompt: Generate CodeMeta metadata for DOI 10.1234/example using CodeMeta version 3.0.
+    fixtures: [doi-record.json, collected-codemeta.json]
+    expect:
+      outcome: validated-artifact
+      target: codemeta.json@3.0
+
+  - id: doi-to-datacite
+    prompt: Create DataCite XML for DOI 10.1234/example using DataCite version 4.6.
+    fixtures: [doi-record.json, collected-codemeta.json]
+    expect:
+      outcome: validated-artifact
+      target: datacite.xml@4.6
+      identifier: 10.1234/example
+
+  - id: incomplete-metadata
+    prompt: Create DataCite XML for the recorded incomplete software object using DataCite version 4.6.
+    fixtures: [incomplete-record.json]
+    expect:
+      outcome: blocked
+      missing: [creator, publisher, publicationYear, doi]
+      fabricated_values: 0
+
+  - id: conflicting-sources
+    prompt: Generate CodeMeta 3.0 for the recorded software release and reconcile its sources.
+    fixtures: [conflicting-records.json]
+    expect:
+      outcome: validated-artifact
+      selected_version: 2.0.0
+      conflict_reported: true
+      authority: tagged-release
+
+  - id: unresolvable-identifier
+    prompt: Generate CodeMeta 3.0 for unsupported:example-object.
+    fixtures: []
+    expect:
+      outcome: resolution-failure
+      guessed_substitute: false
+
+  - id: multiple-datacite-versions
+    prompt: Generate DataCite XML 4.5 and 4.6 from the recorded DOI metadata.
+    fixtures: [doi-record.json, collected-codemeta.json]
+    expect:
+      outcome: two-validated-artifacts
+      distinct_outputs: true
+      versions: ["4.5", "4.6"]
+
+  - id: validation-repair
+    prompt: Generate CodeMeta 3.0 from the recorded invalid normalization, repair the source, and revalidate.
+    fixtures: [invalid-collected-codemeta.json, collected-codemeta.json]
+    expect:
+      outcome: validated-after-source-repair
+      direct_artifact_patch: false
+      failed_attempt_reported: true
