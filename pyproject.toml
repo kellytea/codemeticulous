@@ -31,8 +31,14 @@ build-backend = "setuptools.build_meta"
 include-package-data = false
 
 [tool.setuptools.packages.find]
-include = ["codemeticulous", "codemeticulous.*"]
-exclude = ["tests*", "schema"]
+include = ["codemeticulous", "codemeticulous.*", "schema"]
+exclude = ["tests*"]
 
 [tool.setuptools.package-data]
-"codemeticulous.datacite" = ["schemas/**/*.xsd", "schemas/NOTICE.md"]
+schema = [
+    "*/*.json",
+    "*/*.md",
+    "*/*/*.json",
+    "*/*/*.xsd",
+    "*/*/*/*.xsd",
+]

@@ -72,9 +72,11 @@ and supports format-specific validation for CodeMeta, CFF, and DataCite.
 
 [`skills/research-software-metadata`](skills/research-software-metadata/SKILL.md)
 teaches an agent to resolve a research software identifier, collect and
-reconcile source metadata with field-level provenance, invoke the versioned
-library interface, validate the result, and report conflicts or missing data
-without fabrication. Recorded agent-level evaluation scenarios live beside
+reconcile source metadata with field-level provenance, select a supported
+metadata adapter, invoke the versioned library interface, validate the result,
+and report conflicts or missing data without fabrication. CodeMeta JSON,
+Citation File Format, and DataCite XML are the initial adapters rather than the
+boundary of the skill. Recorded agent-level evaluation scenarios live beside
 the skill and do not require network access.
 
 ## Tests

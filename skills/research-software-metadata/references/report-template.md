@@ -5,7 +5,7 @@ Report the result in this order:
 ## Artifact
 
 - output path
-- target format and exact version
+- target metadata standard, serialization, adapter, and exact version
 - validation result and command used
 
 ## Retrieved fields
@@ -28,6 +28,6 @@ For each conflict, list candidate values and sources, the selected value, and th
 
 List metadata that could not be established, including whether it is optional or blocks the requested schema. Never use a placeholder as a substitute.
 
-## Conversion issues
+## Transformation and validation issues
 
 Include every `codemeticulous` issue path and message, plus any repair and revalidation performed. If generation failed, state the failing stage and leave no claim that an artifact validated.

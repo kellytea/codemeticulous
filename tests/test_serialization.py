@@ -1,4 +1,6 @@
 import json
+from importlib.resources import files
+from pathlib import Path
 
 import pytest
 
@@ -9,6 +11,7 @@ from codemeticulous.datacite.models import (
     RelatedIdentifierType,
     RelationType,
 )
+from codemeticulous.datacite.xml import _schema_path
 
 CODEMETA = {
     "@context": "https://w3id.org/codemeta/3.0",
@@ -59,6 +62,14 @@ def test_datacite_xml_serializes_and_validates_against_xsd(version: str) -> None
     assert f"kernel-{version}/metadata.xsd" in document
     assert '<identifier identifierType="DOI">10.1234/example</identifier>' in document
     assert 'resourceTypeGeneral="Software"' in document
+
+
+@pytest.mark.parametrize("version", ["4.5", "4.6"])
+def test_datacite_xsd_uses_top_level_schema_resource(version: str) -> None:
+    expected = Path(str(files("schema").joinpath("datacite", version, "metadata.xsd")))
+
+    assert _schema_path(version) == expected
+    assert expected.is_file()
 
 
 def test_datacite_versions_produce_distinct_documents() -> None:

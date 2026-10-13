@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from enum import Enum
 from functools import lru_cache
+from importlib.resources import files
 from pathlib import Path
 from typing import Any
 
@@ -93,7 +94,8 @@ def _schema_path(version: str) -> Path:
         raise ValueError(
             f"Unsupported DataCite XML version: {version}. Supported: {choices}"
         )
-    return Path(__file__).with_name("schemas") / version / "metadata.xsd"
+    resource = files("schema").joinpath("datacite", version, "metadata.xsd")
+    return Path(str(resource))
 
 
 @lru_cache(maxsize=None)
