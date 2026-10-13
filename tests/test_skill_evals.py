@@ -2,10 +2,21 @@ from pathlib import Path
 
 import yaml
 
+from codemeticulous.formats import SUPPORTED_VERSIONS, normalize_format
+
+
+SKILL_ROOT = (
+    Path(__file__).parents[1]
+    / ".agents"
+    / "skills"
+    / "research-software-metadata"
+)
+
 
 def test_agent_evaluations_cover_required_scenarios_with_static_fixtures() -> None:
-    skill = Path(__file__).parents[1] / "skills" / "research-software-metadata"
-    evaluation = yaml.safe_load((skill / "evals" / "scenarios.yaml").read_text())
+    evaluation = yaml.safe_load(
+        (SKILL_ROOT / "evals" / "scenarios.yaml").read_text(encoding="utf-8")
+    )
     adapters = evaluation["adapters"]
     scenarios = evaluation["scenarios"]
     required_behaviors = {
@@ -26,7 +37,7 @@ def test_agent_evaluations_cover_required_scenarios_with_static_fixtures() -> No
     }
 
     evaluated_targets = set()
-    fixture_root = skill / "evals" / evaluation["fixtures_root"]
+    fixture_root = SKILL_ROOT / "evals" / evaluation["fixtures_root"]
     for scenario in scenarios:
         for fixture in scenario["fixtures"]:
             assert (fixture_root / fixture).is_file()
@@ -47,3 +58,8 @@ def test_agent_evaluations_cover_required_scenarios_with_static_fixtures() -> No
         for version in configuration["versions"]
     }
     assert registered_targets <= evaluated_targets
+
+    for adapter, configuration in adapters.items():
+        assert tuple(configuration["versions"]) == SUPPORTED_VERSIONS[
+            normalize_format(adapter)
+        ]

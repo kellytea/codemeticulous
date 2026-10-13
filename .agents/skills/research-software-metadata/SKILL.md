@@ -34,8 +34,8 @@ The skill orchestrates discovery, reconciliation, adapter selection, and judgmen
 
 ## Examples
 
-- "Generate CodeMeta metadata for `https://github.com/example/software` using CodeMeta version 3.0."
-- "Create a `CITATION.cff` for `https://github.com/example/software` using CFF version 1.2.0."
+- "Generate `codemeta.json` for `https://github.com/example/software` using version 3.0."
+- "Create `CITATION.cff` for `https://github.com/example/software` using version 1.2.0."
 - "Create DataCite XML metadata for DOI `10.xxxx/example` using DataCite schema version 4.6."
 - "Generate metadata for DOI `10.xxxx/example` using the requested supported standard and schema version."
 

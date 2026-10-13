@@ -27,14 +27,14 @@ def cli() -> None:
     "-f", "--from", "source_format", type=click.Choice(SOURCE_FORMATS), required=True
 )
 @click.option("-t", "--to", "target_format", type=click.Choice(TARGETS), required=True)
-@click.option("--target-version", required=True, help="Exact target schema version.")
+@click.option("--version", required=True, help="Exact target schema version.")
 @click.option("-o", "--output", "output_file", type=click.File("w"), default=None)
 @click.option("-v", "--verbose", is_flag=True, default=False)
 @click.argument("input_file", type=click.Path(exists=True, dir_okay=False))
 def convert_command(
     source_format: str,
     target_format: str,
-    target_version: str,
+    version: str,
     input_file: str,
     output_file,
     verbose: bool,
@@ -47,9 +47,9 @@ def convert_command(
             source_format,
             target_format,
             input_data,
-            target_version=target_version,
+            target_version=version,
         )
-        output_data = serialize(result.value, target_format, target_version)
+        output_data = serialize(result.value, target_format, version)
     except (ConversionError, ValueError) as exc:
         if verbose:
             traceback.print_exc()

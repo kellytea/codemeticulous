@@ -8,7 +8,7 @@ outbound graph:
 codemeta -> software-metadata
          -> codemeta
          -> cff
-         -> datacite
+         -> datacite (.xml/.json)
 ```
 
 CodeMeta 3.0 is the only supported input format. CFF and DataCite ingestion is
@@ -56,10 +56,8 @@ Issues are warnings: they do not make a successful conversion fail.
 ## Command line
 
 ```bash
-codemeticulous convert --from codemeta --to codemeta.json --target-version 3.0 --output output/codemeta.json collected.json
-codemeticulous validate --format codemeta.json --version 3.0 output/codemeta.json
+codemeticulous convert --from codemeta --to datacite.xml --version 4.6 --output output/datacite.xml collected.json
 
-codemeticulous convert --from codemeta --to datacite.xml --target-version 4.6 --output output/datacite.xml collected.json
 codemeticulous validate --format datacite.xml --version 4.6 output/datacite.xml
 ```
 
@@ -70,7 +68,7 @@ and supports format-specific validation for CodeMeta, CFF, and DataCite.
 
 ## Agent skill
 
-[`skills/research-software-metadata`](skills/research-software-metadata/SKILL.md)
+[`.agents/skills/research-software-metadata`]
 teaches an agent to resolve a research software identifier, collect and
 reconcile source metadata with field-level provenance, select a supported
 metadata adapter, invoke the versioned library interface, validate the result,
