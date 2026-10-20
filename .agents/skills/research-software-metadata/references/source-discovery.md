@@ -23,6 +23,13 @@ Search only sources plausibly associated with the resolved object:
 
 Do not treat search-result snippets, generated mirrors, or third-party indexes as authoritative when an owner-maintained or registration source exists.
 
+For a repository URL with a branch, tag, or revision, resolve the ref once and
+pin subsequent file reads to its immutable commit. Check structured metadata
+first, then package metadata, repository documentation, license and notice
+files. Stop fetching after the relevant authoritative sources have been
+collected; do not inspect converter internals to rediscover the registered
+adapter contract.
+
 ## Field-specific authority
 
 Authority is field-specific rather than a single global ranking:
@@ -33,11 +40,22 @@ Authority is field-specific rather than a single global ranking:
 - license: license file or package metadata at the requested revision; do not infer a license from repository visibility.
 - description and keywords: owner-maintained structured metadata, then project documentation.
 
+A branch name is a software version only when owner-maintained documentation
+explicitly defines it as one. A commit timestamp is not a release date, and a
+commit author is not automatically a software creator. Preserve the revision
+as `SoftwareMetadata.revision`; leave `date_released` missing without explicit
+release evidence. Collect every material license and requested citation even
+when the target can represent only one, so conversion loss is reported rather
+than hidden.
+
 Prefer version-matched evidence over a newer default branch. Prefer the source responsible for assigning a value over a downstream copy. Preserve meaningful conflicts even after selecting a winning value.
 
-## Provenance ledger
+## Structured collection
 
-For every candidate field, record:
+Record sources, candidate values, selections, conflicts, inference, and missing
+fields with the public `CollectedSoftwareMetadata` contract described in
+[collection-contract.md](collection-contract.md). For every candidate field,
+record:
 
 - normalized field name and candidate value;
 - classification: `retrieved` or `inferred`;

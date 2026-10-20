@@ -34,6 +34,104 @@ def test_cli_convert_prints_document_and_loss_diagnostics() -> None:
     assert "author[0]:" not in result.stdout
 
 
+def test_cli_requires_explicit_opt_out_for_unprovenanced_input() -> None:
+    runner = CliRunner()
+    with runner.isolated_filesystem():
+        with open("input.json", "w", encoding="utf-8") as file:
+            json.dump({"title": "Tool"}, file)
+
+        result = runner.invoke(
+            cli,
+            [
+                "convert",
+                "--from",
+                "software-metadata",
+                "--to",
+                "software-metadata",
+                "--version",
+                "1",
+                "input.json",
+            ],
+        )
+
+    assert result.exit_code != 0
+    assert "requires --allow-unprovenanced" in result.stderr
+
+
+def test_cli_accepts_canonical_software_metadata_input() -> None:
+    runner = CliRunner()
+    with runner.isolated_filesystem():
+        with open("input.json", "w", encoding="utf-8") as file:
+            json.dump({"title": "Tool"}, file)
+
+        result = runner.invoke(
+            cli,
+            [
+                "convert",
+                "--from",
+                "software-metadata",
+                "--to",
+                "software-metadata",
+                "--version",
+                "1",
+                "--allow-unprovenanced",
+                "input.json",
+            ],
+        )
+
+    assert result.exit_code == 0
+    assert json.loads(result.stdout)["title"] == "Tool"
+
+
+def test_cli_accepts_bom_encoded_structured_collection_input() -> None:
+    runner = CliRunner()
+    collection = {
+        "metadata": {"title": "Tool"},
+        "sources": [
+            {
+                "id": "page",
+                "uri": "https://example.org/tool",
+                "kind": "project-page",
+                "retrieved_at": "2026-10-19T00:00:00Z",
+            }
+        ],
+        "fields": [
+            {
+                "path": "title",
+                "status": "retrieved",
+                "evidence": [
+                    {
+                        "source_id": "page",
+                        "value": "Tool",
+                        "acquisition": "retrieved",
+                    }
+                ],
+                "selected_evidence": 0,
+            }
+        ],
+    }
+    with runner.isolated_filesystem():
+        with open("collection.json", "w", encoding="utf-8-sig") as file:
+            json.dump(collection, file)
+
+        result = runner.invoke(
+            cli,
+            [
+                "convert",
+                "--from",
+                "collected-software-metadata",
+                "--to",
+                "software-metadata",
+                "--version",
+                "1",
+                "collection.json",
+            ],
+        )
+
+    assert result.exit_code == 0
+    assert json.loads(result.stdout)["title"] == "Tool"
+
+
 def test_cli_validate_is_independent_of_conversion_targets() -> None:
     runner = CliRunner()
     with runner.isolated_filesystem():

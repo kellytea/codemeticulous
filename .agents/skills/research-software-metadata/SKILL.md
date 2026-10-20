@@ -7,7 +7,7 @@ description: Resolve a research software URL or persistent identifier, reconcile
 
 Generate metadata through this pipeline:
 
-`identifier/URL -> resolve object -> discover and collect metadata -> normalize -> select adapter -> transform -> validate requested schema/version -> output`
+`identifier/URL -> resolve object -> discover evidence -> collect SoftwareMetadata + provenance -> select adapter -> transform -> validate requested schema/version -> output`
 
 ## Required inputs
 
@@ -24,9 +24,9 @@ Never choose a standard, serialization, or version silently. Read the adapter re
 
 1. Read [source-discovery.md](references/source-discovery.md), resolve the identifier, and collect relevant records. Prefer version-specific records when the request identifies a release.
 2. Reconcile each field independently. Treat a source as authoritative only for fields it owns: for example, a repository release for source/version details and a DOI registration record for DOI deposit details. Record all material conflicts.
-3. Maintain a field ledger with the value, source URL or identifier, retrieval status, and any inference. Keep **retrieved** and **agent-inferred** values distinct. An inference must name its evidence and reasoning.
-4. Normalize supported values into the converter input required by the selected adapter. Treat that input serialization as an implementation detail, not as the conceptual metadata standard. Do not invent mandatory values. Omit unsupported unknowns and record them as missing; if the requested target requires one, report that generation cannot complete.
-5. Run the registered `codemeticulous` transformation for the requested target and version. Treat conversion issues as reportable information loss, not as ignorable noise.
+3. Produce and validate the [`CollectedSoftwareMetadata` contract](references/collection-contract.md). Every populated canonical field must select evidence from a registered source. Keep **retrieved** and **agent-inferred** values distinct; an inference must name its evidence and reasoning.
+4. Preserve the validated collection as the provenance sidecar. Do not invent mandatory values. Record unknowns as missing; if the requested target requires one, report that generation cannot complete.
+5. Pass the complete collection to the registered `codemeticulous` transformation as `collected-software-metadata`. Do not bypass contract validation by passing raw `SoftwareMetadata`. Treat conversion issues as reportable information loss, not as ignorable noise.
 6. Run the registered validator against the same standard, serialization, and explicit version. If validation fails, repair the collected or normalized source value, rerun transformation, and validate again. Never patch a generated artifact merely to silence validation, and never drop or fabricate data silently.
 7. Write the artifact only after validation succeeds. Use [report-template.md](references/report-template.md) for the final response and classify fields as retrieved, inferred, ambiguous, conflicting, or missing.
 

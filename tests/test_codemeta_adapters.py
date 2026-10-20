@@ -360,6 +360,16 @@ def test_year_only_is_not_fabricated_and_conflicts_are_reported() -> None:
     assert conflict.issues[0].path == "publication_year"
 
 
+def test_revision_loss_is_reported_for_codemeta() -> None:
+    result = software_metadata_to_codemeta(
+        SoftwareMetadata(title="Tool", revision="abc123")
+    )
+
+    assert [(issue.path, issue.message) for issue in result.issues] == [
+        ("revision", "source revision has no CodeMeta field")
+    ]
+
+
 def test_unsupported_relation_is_reported_per_element() -> None:
     result = software_metadata_to_codemeta(
         SoftwareMetadata(

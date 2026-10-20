@@ -5,14 +5,16 @@ The neutral `SoftwareMetadata` model is the hub for the currently supported
 outbound graph:
 
 ```text
-codemeta -> software-metadata
-         -> codemeta
-         -> cff
-         -> datacite (.xml/.json)
+codemeta -------------------\
+software-metadata -----------> software-metadata -> codemeta
+collected-software-metadata -/                    -> cff
+                                                  -> datacite (.xml/.json)
 ```
 
-CodeMeta 3.0 is the only supported input format. CFF and DataCite ingestion is
-deferred. Target versions are CodeMeta 3.0, CFF 1.2.0, and DataCite 4.5 or 4.6.
+CodeMeta 3.0, canonical `SoftwareMetadata` version 1, and the provenance-bearing
+`CollectedSoftwareMetadata` contract are supported inputs. CFF and DataCite
+ingestion are deferred. Target versions are CodeMeta 3.0, CFF 1.2.0, and
+DataCite 4.5 or 4.6.
 DataCite output is XML and is validated offline against the requested official
 XSD. Conversions return a `ConversionResult`; its `value` is the target model
 and its ordered `issues` describe non-fatal information loss.
@@ -53,10 +55,40 @@ for issue in result.issues:
 Input validation and target construction failures raise `ConversionError`.
 Issues are warnings: they do not make a successful conversion fail.
 
+## Structured agent collection
+
+Agents and other metadata providers can return a canonical, provenance-bearing
+collection without depending on a particular LLM SDK:
+
+```python
+from codemeticulous import collection_json_schema, convert, validate_collection
+
+schema = collection_json_schema()  # Supply this to a structured-output provider.
+collected = validate_collection(provider_output)
+
+result = convert(
+    "collected-software-metadata",
+    "datacite.xml",
+    collected,
+    target_version="4.6",
+)
+```
+
+The collection contract requires selected evidence for every populated
+`SoftwareMetadata` field and preserves retrieved, inferred, ambiguous,
+conflicting, and missing classifications separately from target serialization.
+Passing the complete contract as `collected-software-metadata` validates that
+boundary again immediately before conversion.
+The CLI requires an explicit `--allow-unprovenanced` opt-out before it accepts
+raw `software-metadata`; the Python API retains direct canonical input for
+trusted library callers.
+
 ## Command line
 
 ```bash
-codemeticulous convert --from codemeta --to datacite.xml --version 4.6 --output output/datacite.xml collected.json
+codemeticulous convert --from codemeta --to datacite.xml --version 4.6 --output output/datacite.xml input.json
+
+codemeticulous convert --from collected-software-metadata --to cff --version 1.2.0 --output CITATION.cff collection.json
 
 codemeticulous validate --format datacite.xml --version 4.6 output/datacite.xml
 ```

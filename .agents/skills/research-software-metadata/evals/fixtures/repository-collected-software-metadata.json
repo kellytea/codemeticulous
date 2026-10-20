@@ -1,0 +1,219 @@
+{
+  "requested_identifier": "https://github.com/example/research-tool/tree/v2.0.0",
+  "metadata": {
+    "title": "Example Research Tool",
+    "description": "A synthetic research software record used for offline metadata evaluation.",
+    "version": "2.0.0",
+    "revision": "0123456789abcdef0123456789abcdef01234567",
+    "url": "https://example.org/research-tool",
+    "repository_code": "https://github.com/example/research-tool/tree/v2.0.0",
+    "creators": [
+      {
+        "kind": "person",
+        "name": "Alex Example"
+      }
+    ],
+    "licenses": [
+      {
+        "identifier": "Apache-2.0",
+        "url": "https://www.apache.org/licenses/LICENSE-2.0"
+      },
+      {
+        "name": "BSD-3-Clause incorporated code"
+      }
+    ],
+    "relations": [
+      {
+        "relation": "cites",
+        "title": "Example Simulation Library",
+        "resource_type": "software",
+        "url": "https://example.org/software/simulation-library",
+        "creators": [
+          {"kind": "person", "name": "Morgan Example"}
+        ]
+      },
+      {
+        "relation": "cites",
+        "title": "Example Runtime",
+        "resource_type": "software",
+        "url": "https://example.org/software/runtime",
+        "creators": [
+          {"kind": "organization", "name": "Example Research Institute"}
+        ]
+      }
+    ]
+  },
+  "sources": [
+    {
+      "id": "release-readme",
+      "uri": "https://github.com/example/research-tool/blob/v2.0.0/README.md",
+      "kind": "repository-documentation",
+      "retrieved_at": "2025-01-15T12:00:00Z",
+      "object_version": "0123456789abcdef0123456789abcdef01234567"
+    },
+    {
+      "id": "tag-api",
+      "uri": "https://api.github.com/repos/example/research-tool/git/ref/tags/v2.0.0",
+      "kind": "repository-release",
+      "retrieved_at": "2025-01-15T12:00:00Z",
+      "media_type": "application/json",
+      "object_version": "0123456789abcdef0123456789abcdef01234567"
+    },
+    {
+      "id": "repository-api",
+      "uri": "https://api.github.com/repos/example/research-tool",
+      "kind": "repository-hosting-metadata",
+      "retrieved_at": "2025-01-15T12:00:00Z",
+      "media_type": "application/json"
+    }
+  ],
+  "fields": [
+    {
+      "path": "title",
+      "status": "retrieved",
+      "evidence": [
+        {
+          "source_id": "release-readme",
+          "value": "Example Research Tool",
+          "acquisition": "retrieved",
+          "selector": "heading[1]"
+        }
+      ],
+      "selected_evidence": 0
+    },
+    {
+      "path": "description",
+      "status": "retrieved",
+      "evidence": [
+        {
+          "source_id": "repository-api",
+          "value": "A synthetic research software record used for offline metadata evaluation.",
+          "acquisition": "retrieved",
+          "selector": "$.description"
+        }
+      ],
+      "selected_evidence": 0
+    },
+    {
+      "path": "version",
+      "status": "retrieved",
+      "evidence": [
+        {
+          "source_id": "tag-api",
+          "value": "2.0.0",
+          "acquisition": "retrieved",
+          "selector": "$.ref"
+        }
+      ],
+      "selected_evidence": 0,
+      "authority_rule": "The version is taken from the requested immutable repository tag."
+    },
+    {
+      "path": "revision",
+      "status": "retrieved",
+      "evidence": [
+        {
+          "source_id": "tag-api",
+          "value": "0123456789abcdef0123456789abcdef01234567",
+          "acquisition": "retrieved",
+          "selector": "$.object.sha"
+        }
+      ],
+      "selected_evidence": 0
+    },
+    {
+      "path": "url",
+      "status": "retrieved",
+      "evidence": [
+        {
+          "source_id": "repository-api",
+          "value": "https://example.org/research-tool",
+          "acquisition": "retrieved",
+          "selector": "$.homepage"
+        }
+      ],
+      "selected_evidence": 0
+    },
+    {
+      "path": "repository_code",
+      "status": "retrieved",
+      "evidence": [
+        {
+          "source_id": "tag-api",
+          "value": "https://github.com/example/research-tool/tree/v2.0.0",
+          "acquisition": "retrieved",
+          "selector": "requested tag URL"
+        }
+      ],
+      "selected_evidence": 0
+    },
+    {
+      "path": "creators",
+      "status": "retrieved",
+      "evidence": [
+        {
+          "source_id": "release-readme",
+          "value": [{"kind": "person", "name": "Alex Example"}],
+          "acquisition": "retrieved",
+          "selector": "Citation"
+        }
+      ],
+      "selected_evidence": 0
+    },
+    {
+      "path": "licenses",
+      "status": "retrieved",
+      "evidence": [
+        {
+          "source_id": "release-readme",
+          "value": [
+            {
+              "identifier": "Apache-2.0",
+              "url": "https://www.apache.org/licenses/LICENSE-2.0"
+            },
+            {"name": "BSD-3-Clause incorporated code"}
+          ],
+          "acquisition": "retrieved",
+          "selector": "Licensing"
+        }
+      ],
+      "selected_evidence": 0
+    },
+    {
+      "path": "relations",
+      "status": "retrieved",
+      "evidence": [
+        {
+          "source_id": "release-readme",
+          "value": [
+            {
+              "relation": "cites",
+              "title": "Example Simulation Library",
+              "resource_type": "software",
+              "url": "https://example.org/software/simulation-library",
+              "creators": [
+                {"kind": "person", "name": "Morgan Example"}
+              ]
+            },
+            {
+              "relation": "cites",
+              "title": "Example Runtime",
+              "resource_type": "software",
+              "url": "https://example.org/software/runtime",
+              "creators": [
+                {"kind": "organization", "name": "Example Research Institute"}
+              ]
+            }
+          ],
+          "acquisition": "retrieved",
+          "selector": "References"
+        }
+      ],
+      "selected_evidence": 0
+    },
+    {
+      "path": "date_released",
+      "status": "missing"
+    }
+  ]
+}

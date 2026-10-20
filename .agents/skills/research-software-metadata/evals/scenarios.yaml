@@ -1,4 +1,4 @@
-version: 2
+version: 3
 network: disabled
 fixtures_root: fixtures
 adapters:
@@ -22,13 +22,17 @@ scenarios:
       provenance_required: true
 
   - id: repository-to-cff
-    prompt: Generate CITATION.cff for https://github.com/example/research-tool using Citation File Format version 1.2.0.
-    fixtures: [repository-release.json, collected-codemeta.json]
-    covers: [identifier-resolution, adapter-selection, validated-artifact]
+    prompt: Generate CITATION.cff for https://github.com/example/research-tool/tree/v2.0.0 using Citation File Format version 1.2.0.
+    fixtures: [repository-collected-software-metadata.json]
+    covers: [identifier-resolution, provenance, structured-collection, adapter-selection, no-fabrication, validated-artifact]
     expect:
       outcome: validated-artifact
       target: cff@1.2.0
       provenance_required: true
+      collection_contract: CollectedSoftwareMetadata
+      commit: 0123456789abcdef0123456789abcdef01234567
+      date_released: null
+      reported_issue_paths: ["licenses[1]"]
 
   - id: doi-to-codemeta
     prompt: Generate CodeMeta metadata for DOI 10.1234/example using CodeMeta version 3.0.
@@ -40,12 +44,13 @@ scenarios:
 
   - id: doi-to-datacite
     prompt: Create DataCite XML for DOI 10.1234/example using DataCite version 4.6.
-    fixtures: [doi-record.json, collected-codemeta.json]
-    covers: [identifier-resolution, adapter-selection, validated-artifact]
+    fixtures: [doi-record.json, collected-software-metadata.json]
+    covers: [identifier-resolution, structured-collection, adapter-selection, validated-artifact]
     expect:
       outcome: validated-artifact
       target: datacite.xml@4.6
       identifier: 10.1234/example
+      collection_contract: CollectedSoftwareMetadata
 
   - id: incomplete-metadata
     prompt: Create DataCite XML for the recorded incomplete software object using DataCite version 4.6.

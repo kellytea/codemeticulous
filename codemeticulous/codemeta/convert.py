@@ -27,7 +27,6 @@ from codemeticulous.models import (
     SoftwareMetadata,
 )
 
-
 RELATIONS = {
     "citation": "cites",
     "softwareRequirements": "requires",
@@ -537,6 +536,8 @@ def software_metadata_to_codemeta(
             )
     if data.repository:
         issues.append(_issue("repository", "generic repository has no CodeMeta field"))
+    if data.revision:
+        issues.append(_issue("revision", "source revision has no CodeMeta field"))
     if data.repository_artifact:
         issues.append(
             _issue("repository_artifact", "repository artifact has no CodeMeta field")

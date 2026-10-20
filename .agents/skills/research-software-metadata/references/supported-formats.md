@@ -11,10 +11,12 @@ adapter and this registry records how to invoke it.
 | `cff` | Citation File Format | `1.2.0` | YAML (`CITATION.cff`) |
 | `datacite.xml` | DataCite Metadata Schema | `4.5`, `4.6` | XML |
 
-The command-line converter currently accepts CodeMeta 3.0 as its normalized
-input. That is an implementation constraint shared by the adapters below, not
-a restriction on the skill's future outputs. CFF and DataCite ingestion are
-not yet supported.
+The converter accepts CodeMeta 3.0, canonical SoftwareMetadata 1, or a validated
+`CollectedSoftwareMetadata` contract as input. Agent workflows must use
+`collected-software-metadata`; direct canonical input is reserved for trusted
+non-agent callers and requires the CLI's explicit `--allow-unprovenanced`
+opt-out. CFF and DataCite ingestion are not yet implemented as deterministic
+fast paths.
 
 ## Invocation pattern
 
@@ -22,7 +24,7 @@ Use the adapter and version from the registry table. Keep the same explicit
 version for conversion, serialization, and validation.
 
 ```console
-codemeticulous convert --from codemeta --to TARGET --version VERSION --output OUTPUT WORK/collected-codemeta.json
+codemeticulous convert --from collected-software-metadata --to TARGET --version VERSION --output OUTPUT WORK/collection.json
 codemeticulous validate --format TARGET --version VERSION OUTPUT
 ```
 
@@ -32,7 +34,7 @@ Python API equivalent:
 from codemeticulous import convert, serialize, validate_document
 
 result = convert(
-    "codemeta",
+    "collected-software-metadata",
     target,
     collected,
     target_version=version,
@@ -49,6 +51,13 @@ Use target `codemeta.json`, version `3.0`, and an output such as
 ## Citation File Format 1.2.0
 
 Use target `cff`, version `1.2.0`, and output `OUTPUT/CITATION.cff`.
+The target requires a title and at least one author. Map the canonical
+`revision` to CFF `commit`; do not substitute a commit timestamp for
+`date-released`. CFF can serialize only one license, so collect every applicable
+license and report the converter's issue for each additional license. Canonical
+`cites` relations become CFF references. Use `repository-code` for a source
+repository and avoid duplicating it into `repository` without distinct
+evidence. Email values must be plain addresses rather than Markdown links.
 
 ## DataCite XML 4.5 or 4.6
 

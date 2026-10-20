@@ -1,0 +1,73 @@
+{
+  "requested_identifier": "10.1234/example",
+  "metadata": {
+    "title": "Example Research Tool",
+    "publisher": {
+      "kind": "organization",
+      "name": "Example Archive"
+    },
+    "category": "Software",
+    "publication_year": 2024,
+    "creators": [
+      {
+        "kind": "person",
+        "name": "Lovelace, Ada",
+        "given_names": ["Ada"],
+        "family_names": ["Lovelace"]
+      }
+    ],
+    "identifiers": [
+      {
+        "value": "10.1234/example",
+        "scheme": "DOI"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "id": "doi-record",
+      "uri": "https://api.datacite.org/dois/10.1234/example",
+      "kind": "doi-registration",
+      "retrieved_at": "2026-10-19T00:00:00Z",
+      "media_type": "application/json"
+    }
+  ],
+  "fields": [
+    {
+      "path": "title",
+      "status": "retrieved",
+      "evidence": [{"source_id": "doi-record", "value": "Example Research Tool", "acquisition": "retrieved", "selector": "$.data.attributes.titles[0].title"}],
+      "selected_evidence": 0
+    },
+    {
+      "path": "publisher",
+      "status": "retrieved",
+      "evidence": [{"source_id": "doi-record", "value": {"kind": "organization", "name": "Example Archive"}, "acquisition": "retrieved", "selector": "$.data.attributes.publisher"}],
+      "selected_evidence": 0
+    },
+    {
+      "path": "category",
+      "status": "retrieved",
+      "evidence": [{"source_id": "doi-record", "value": "Software", "acquisition": "retrieved", "selector": "$.data.attributes.types.resourceTypeGeneral"}],
+      "selected_evidence": 0
+    },
+    {
+      "path": "publication_year",
+      "status": "retrieved",
+      "evidence": [{"source_id": "doi-record", "value": 2024, "acquisition": "retrieved", "selector": "$.data.attributes.publicationYear"}],
+      "selected_evidence": 0
+    },
+    {
+      "path": "creators",
+      "status": "retrieved",
+      "evidence": [{"source_id": "doi-record", "value": [{"kind": "person", "name": "Lovelace, Ada", "given_names": ["Ada"], "family_names": ["Lovelace"]}], "acquisition": "retrieved", "selector": "$.data.attributes.creators"}],
+      "selected_evidence": 0
+    },
+    {
+      "path": "identifiers",
+      "status": "retrieved",
+      "evidence": [{"source_id": "doi-record", "value": [{"value": "10.1234/example", "scheme": "DOI"}], "acquisition": "retrieved", "selector": "$.data.attributes.doi"}],
+      "selected_evidence": 0
+    }
+  ]
+}

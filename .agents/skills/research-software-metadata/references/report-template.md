@@ -5,6 +5,7 @@ Report the result in this order:
 ## Artifact
 
 - output path
+- validated provenance sidecar path or retained execution result
 - target metadata standard, serialization, adapter, and exact version
 - validation result and command used
 

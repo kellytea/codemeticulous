@@ -13,7 +13,12 @@ from codemeticulous.formats import FORMAT_ALIASES, SUPPORTED_VERSIONS
 from codemeticulous.serialization import serialize
 from codemeticulous.validation import validate_file
 
-SOURCE_FORMATS = ("codemeta", "codemeta.json")
+SOURCE_FORMATS = (
+    "collected-software-metadata",
+    "software-metadata",
+    "codemeta",
+    "codemeta.json",
+)
 VALIDATION_FORMATS = tuple(SUPPORTED_VERSIONS) + tuple(FORMAT_ALIASES)
 
 
@@ -30,6 +35,12 @@ def cli() -> None:
 @click.option("--version", required=True, help="Exact target schema version.")
 @click.option("-o", "--output", "output_file", type=click.File("w"), default=None)
 @click.option("-v", "--verbose", is_flag=True, default=False)
+@click.option(
+    "--allow-unprovenanced",
+    is_flag=True,
+    default=False,
+    help="Allow direct SoftwareMetadata input without collection provenance.",
+)
 @click.argument("input_file", type=click.Path(exists=True, dir_okay=False))
 def convert_command(
     source_format: str,
@@ -38,10 +49,16 @@ def convert_command(
     input_file: str,
     output_file,
     verbose: bool,
+    allow_unprovenanced: bool,
 ) -> None:
-    """Convert CodeMeta INPUT_FILE to an explicitly versioned target."""
+    """Convert INPUT_FILE to an explicitly versioned target."""
 
     try:
+        if source_format == "software-metadata" and not allow_unprovenanced:
+            raise ConversionError(
+                "Direct software-metadata input requires --allow-unprovenanced; "
+                "agent workflows must use collected-software-metadata"
+            )
         input_data = load_file_autodetect(input_file)
         result = convert_metadata(
             source_format,
@@ -91,7 +108,7 @@ def validate_command(
 def load_file_autodetect(file_path: str):
     _, extension = os.path.splitext(file_path)
     try:
-        with open(file_path, "r", encoding="utf-8") as file:
+        with open(file_path, "r", encoding="utf-8-sig") as file:
             if extension.lower() == ".json":
                 return json.load(file)
             if extension.lower() in {".yaml", ".yml", ".cff"}:
