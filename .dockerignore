@@ -1,0 +1,8 @@
+.git
+.venv
+.pytest_cache
+.codex
+.agents
+**/__pycache__
+**/*.pyc
+benchmarks/research-software-metadata/data

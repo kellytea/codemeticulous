@@ -1,7 +1,0 @@
-{
-  "@context": "https://w3id.org/codemeta/3.0",
-  "@type": "SoftwareSourceCode",
-  "author": {"@type": "Person", "name": "Ada Lovelace"},
-  "publisher": {"@type": "Organization", "name": "Example Archive"},
-  "datePublished": "not-a-date"
-}

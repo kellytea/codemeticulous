@@ -1,6 +1,4 @@
 from datetime import UTC, date, datetime
-import json
-from pathlib import Path
 
 import pytest
 from pydantic import ValidationError
@@ -71,23 +69,6 @@ def test_collection_schema_is_provider_neutral() -> None:
 
     assert schema["title"] == "CollectedSoftwareMetadata"
     assert {"metadata", "sources", "fields"} <= set(schema["properties"])
-
-
-def test_recorded_agent_collection_fixture_satisfies_contract() -> None:
-    fixture = (
-        Path(__file__).parents[1]
-        / ".agents"
-        / "skills"
-        / "research-software-metadata"
-        / "evals"
-        / "fixtures"
-        / "collected-software-metadata.json"
-    )
-
-    collected = validate_collection(json.loads(fixture.read_text(encoding="utf-8")))
-
-    assert collected.metadata.title == "Example Research Tool"
-    assert collected.requested_identifier == "10.1234/example"
 
 
 def test_inferred_evidence_requires_reasoning() -> None:

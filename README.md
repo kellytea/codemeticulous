@@ -8,12 +8,11 @@ outbound graph:
 codemeta -------------------\
 software-metadata -----------> software-metadata -> codemeta
 collected-software-metadata -/                    -> cff
-                                                  -> datacite (.xml/.json)
+                                                  -> datacite
 ```
 
 CodeMeta 3.0, canonical `SoftwareMetadata` version 1, and the provenance-bearing
-`CollectedSoftwareMetadata` contract are supported inputs. CFF and DataCite
-ingestion are deferred. Target versions are CodeMeta 3.0, CFF 1.2.0, and
+`CollectedSoftwareMetadata` contract are supported inputs. Target versions are CodeMeta 3.0, CFF 1.2.0, and
 DataCite 4.5 or 4.6.
 DataCite output is XML and is validated offline against the requested official
 XSD. Conversions return a `ConversionResult`; its `value` is the target model
@@ -88,8 +87,6 @@ trusted library callers.
 ```bash
 codemeticulous convert --from codemeta --to datacite.xml --version 4.6 --output output/datacite.xml input.json
 
-codemeticulous convert --from collected-software-metadata --to cff --version 1.2.0 --output CITATION.cff collection.json
-
 codemeticulous validate --format datacite.xml --version 4.6 output/datacite.xml
 ```
 
@@ -106,8 +103,9 @@ reconcile source metadata with field-level provenance, select a supported
 metadata adapter, invoke the versioned library interface, validate the result,
 and report conflicts or missing data without fabrication. CodeMeta JSON,
 Citation File Format, and DataCite XML are the initial adapters rather than the
-boundary of the skill. Recorded agent-level evaluation scenarios live beside
-the skill and do not require network access.
+boundary of the skill. Agent-level evaluation scenarios live beside the skill:
+deterministic cases use recorded fixtures, while explicitly marked live cases
+resolve real repository URLs and DOIs with network access.
 
 ## Tests
 

@@ -38,5 +38,3 @@ The skill orchestrates discovery, reconciliation, adapter selection, and judgmen
 - "Create `CITATION.cff` for `https://github.com/example/software` using version 1.2.0."
 - "Create DataCite XML metadata for DOI `10.xxxx/example` using DataCite schema version 4.6."
 - "Generate metadata for DOI `10.xxxx/example` using the requested supported standard and schema version."
-
-Recorded, network-free behavioral cases are in [evals/scenarios.yaml](evals/scenarios.yaml). Use live resolution only when the execution environment permits it; do not substitute live results for the recorded evaluation fixtures.
