@@ -1,7 +1,7 @@
 services:
   default:
     build:
-      context: ../..
+      context: ..
       dockerfile: benchmarks/Dockerfile
     init: true
     command: sleep infinity

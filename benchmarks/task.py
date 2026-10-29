@@ -235,4 +235,5 @@ def research_software_metadata() -> Task:
         ),
         scorer=metadata_scores(),
         sandbox=("docker", "compose.yaml"),
+        time_limit=900,
     )
